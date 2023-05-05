@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "admin",
+    "password": "jfk",
+    "database": "ubeer",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "admin",
+    "password": "jfk",
+    "database": "ubeer",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "admin",
+    "password": "jfk",
+    "database": "ubeer",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  }
+}
