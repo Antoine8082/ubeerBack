@@ -1,20 +1,28 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { Model } = require('sequelize');
 
-class Brewery extends Model {}
+module.exports = (sequelize, DataTypes) => {
+  class Brewery extends Model {
+    static associate(models) {
+      Brewery.hasMany(models.Beer, { foreignKey: 'breweryId' });
+    }
+  }
 
-Brewery.init({
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
-}, {
-  sequelize,
-  modelName: 'Brewery'
-});
+  Brewery.init(
+    {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      address: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Brewery',
+    }
+  );
 
-module.exports = Brewery;
+  return Brewery;
+};

@@ -3,15 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
-
-const beer = require('./beer');
-const brewery = require('./brewery');
-const image = require('./image');
 
 let sequelize;
 if (config.use_env_variable) {
@@ -31,21 +26,23 @@ fs
     );
   })
   .forEach(file => {
-    const model = require(path.join(__dirname, file));
-    const modelInstance = new model(sequelize, Sequelize.DataTypes);
-    db[modelInstance.name] = modelInstance;
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    db[model.name] = model;
   });
 
+Object.values(db)
+  .filter(model => typeof model.associate === 'function')
+  .forEach(model => model.associate(db));
 
-beer.belongsTo(brewery, { foreignKey: 'breweryId' });
-brewery.hasMany(beer, { foreignKey: 'beerId' });
+db.Beer.belongsTo(db.Brewery, { foreignKey: 'breweryId', as: 'brewery' });
+db.Beer.hasMany(db.Image, { foreignKey: 'beerId', as: 'images' });
 
-image.belongsTo(beer, { as: 'beerImage', foreignKey: 'beerId' });
-image.belongsTo(brewery, { as: 'breweryImage', foreignKey: 'breweryId' });
+db.Brewery.hasMany(db.Beer, { foreignKey: 'breweryId', as: 'beers' });
+db.Brewery.hasMany(db.Image, { foreignKey: 'breweryId', as: 'images' });
 
-db.beer = beer;
-db.brewery = brewery;
-db.image = image;
+db.Image.belongsTo(db.Beer, { foreignKey: 'beerId', as: 'beer' });
+db.Image.belongsTo(db.Brewery, { foreignKey: 'breweryId', as: 'brewery' });
+
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
