@@ -1,4 +1,6 @@
 const { Brewery, Beer } = require('../models');
+const db = require('../models');
+
 
 
 exports.getBreweries = async (req, res) => {

@@ -1,5 +1,6 @@
 
 const { Image } = require('../models');
+const db = require('../models');
 
 
 exports.getImages = async (req, res) => {
@@ -29,17 +30,26 @@ exports.getImageById = async (req, res) => {
 
 exports.createImage = async (req, res) => {
   try {
-    if (!req.file) {
-      res.status(400).json({ message: 'Image file is required' });
+    const { imageUrl, beerId, breweryId } = req.body;
+
+    if (!imageUrl) {
+      res.status(400).json({ message: 'Image URL is required' });
       return;
     }
 
-    const newImage = await db.Image.create({ path: req.file.path });
+    if (!beerId || !breweryId) {
+      res.status(400).json({ message: 'Both beerId and breweryId are required' });
+      return;
+    }
+
+    const newImage = await db.Image.create({ imageUrl, beerId, breweryId });
     res.status(201).json(newImage);
   } catch (error) {
     res.status(500).json({ message: 'Error creating image', error: error.message });
   }
 };
+
+
 
 
 
