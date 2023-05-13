@@ -35,14 +35,8 @@ Object.values(db)
   .forEach(model => model.associate(db));
 
 db.Beer.belongsTo(db.Brewery, { foreignKey: 'breweryId', as: 'brewery' });
-db.Beer.hasMany(db.Image, { foreignKey: 'beerId', as: 'images' });
 
 db.Brewery.hasMany(db.Beer, { foreignKey: 'breweryId', as: 'beers' });
-db.Brewery.hasMany(db.Image, { foreignKey: 'breweryId', as: 'images' });
-
-db.Image.belongsTo(db.Beer, { foreignKey: 'beerId', as: 'beer' });
-db.Image.belongsTo(db.Brewery, { foreignKey: 'breweryId', as: 'brewery' });
-
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
