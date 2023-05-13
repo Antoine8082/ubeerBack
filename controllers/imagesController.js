@@ -1,6 +1,7 @@
 
 const { Image } = require('../models');
 const db = require('../models');
+const upload = require('../config/multer');
 
 
 exports.getImages = async (req, res) => {
@@ -30,26 +31,27 @@ exports.getImageById = async (req, res) => {
 
 exports.createImage = async (req, res) => {
   try {
-    const { imageUrl, beerId, breweryId } = req.body;
-
-    if (!imageUrl) {
-      res.status(400).json({ message: 'Image URL is required' });
-      return;
-    }
+    const { beerId, breweryId } = req.body;
 
     if (!beerId || !breweryId) {
       res.status(400).json({ message: 'Both beerId and breweryId are required' });
       return;
     }
 
-    const newImage = await db.Image.create({ imageUrl, beerId, breweryId });
+    if (!req.file) {
+      res.status(400).json({ message: 'Image file is required' });
+      return;
+    }
+
+    const imageUrl = req.file.path;
+    const imageData = req.file.buffer;
+
+    const newImage = await db.Image.create({ imageUrl, imageData, beerId, breweryId });
     res.status(201).json(newImage);
   } catch (error) {
     res.status(500).json({ message: 'Error creating image', error: error.message });
   }
 };
-
-
 
 
 

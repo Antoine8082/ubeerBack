@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      imageData: {
+        type: DataTypes.BLOB, //LONGTEXT
+        allowNull: false,
+      },
       beerId: {
         type: DataTypes.INTEGER,
         allowNull: false,

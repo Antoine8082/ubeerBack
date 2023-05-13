@@ -28,6 +28,10 @@ exports.getBeerById = async (req, res) => {
           model: db.Brewery,
           as: 'brewery'
         },
+        {
+          model: db.Image,
+          as: 'beerImage'
+        },
       ],
     });
 

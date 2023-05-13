@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class Beer extends Model {
     static associate(models) {
       Beer.belongsTo(models.Brewery, { foreignKey: 'breweryId' });
+      Beer.hasOne(models.Image, { as: 'beerImage', foreignKey: 'beerId' });
     }
   }
 
@@ -27,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       price: {
         type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      type: {
+        type: DataTypes.ENUM('Brune', 'Blonde', 'Rousse', 'Blanche'),
         allowNull: false,
       },
     },
