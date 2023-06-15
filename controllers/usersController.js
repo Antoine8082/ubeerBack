@@ -16,11 +16,22 @@ exports.register = async (req, res, next) => {
   }
 }
 
-exports.login = passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true
-})
+exports.login = async (req, res, next) => {
+  const user = await User.findOne({ where: { username: req.body.username } });
+  if (user == null) {
+    return res.status(400).send('Cannot find user');
+  }
+  try {
+    if(user.password == req.body.password) {
+      res.send(user);
+    }
+    else {
+      res.send('Not Allowed');
+    }
+  } catch {
+    res.status(500).send();
+  }
+}
 
 exports.logout = (req, res) => {
   req.logout();
