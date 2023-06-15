@@ -30,6 +30,10 @@ fs
     db[model.name] = model;
   });
 
+
+const User = require('./user')(sequelize, Sequelize.DataTypes);
+db['User'] = User;
+
 Object.values(db)
   .filter(model => typeof model.associate === 'function')
   .forEach(model => model.associate(db));
