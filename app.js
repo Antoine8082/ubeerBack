@@ -27,7 +27,6 @@ app.use('/api/breweries', breweriesRoutes);
 app.use('/api/images', imagesRoutes);
 app.use('/api/users', usersRoutes);
 
-
 const port = process.env.PORT || 3000;
 
 User.sync().then(() => {
